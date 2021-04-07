@@ -61,7 +61,10 @@ def manipulate_route_table(action, interface):
 
     for ip in get_china_ip4().iter_cidrs():
         command = command_template.format(executable, action, ip, interface)
-        subprocess.check_output(command, shell=True, stderr=subprocess.DEVNULL).decode('utf-8')
+        try:
+            subprocess.check_output(command, shell=True, stderr=subprocess.DEVNULL).decode('utf-8')
+        except subprocess.CalledProcessError as e:
+            logging.error('执行命令 {} 时发生错误', command)
 
 
 def get_arg_parser():
